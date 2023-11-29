@@ -67,9 +67,9 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Project $project)
     {
-        //
+        return view('admin.projects.edit', compact('project'));
     }
 
     /**
@@ -79,9 +79,19 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Project $project)
     {
-        //
+        $form_data = $request->all();
+
+        if($project->title=== $form_data['title']){
+            $form_data['slug'] = $project->slug;
+        }else{
+            $form_data['slug'] = Project::generateSlug($form_data['title']);
+        }
+
+        $project->update($form_data);
+
+        return redirect()->route('admin.projects.show', $project);
     }
 
     /**
@@ -90,8 +100,10 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Project $project)
     {
-        //
+
+        $project->delete();
+        return redirect()->route('admin.projects.index')->with('success', 'Progetto eliminato correttamente');
     }
 }

@@ -4,6 +4,7 @@
     <div class="project-create container">
         <h1>Inserisci un nuovo progetto</h1>
         <form
+        class="form-group"
         action="{{route('admin.projects.store')}}"
         method="POST">
         @csrf
