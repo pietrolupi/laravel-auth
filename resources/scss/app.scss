@@ -1,0 +1,43 @@
+@import '~bootstrap/scss/bootstrap';
+
+header{
+    height: 60px;
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    width: 100% ;
+}
+
+
+.main-wrapper{
+    height: calc(100vh - 60px);
+}
+aside{
+
+    width:250px;
+    height:100%;
+    padding-top: 30px;
+
+    ul{
+        list-style: none;
+        li{
+            margin-bottom: 20px;
+            a{
+                color: white;
+                text-decoration: none;
+                font-weight: bold;
+            }
+        }
+    }
+
+}
+
+.technologies.container{
+    .table{
+        max-width: 860px;
+        border: 1px solid grey;
+        border-radius: 40;
+    }
+}
