@@ -5,6 +5,17 @@
 <div class="types container">
 
     <h1>Tipologie di lavoro</h1>
+
+    @if($errors->any())
+    <div class="alert alert-danger" role="alert">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     <form action="{{route('admin.types.store')}}" method="POST" >
         @csrf
 
@@ -35,14 +46,29 @@
             @foreach ($types as $type)
 
             <tr>
-              <td>{{$type->name}}</td>
 
-              <td>
+                <td>
+                    <form
+                    action="{{route('admin.types.update',$type)}}"
+                    method="POST"
+                    id="form-edit">
 
-                @include('admin.partials.form_delete', ['route' => route('admin.types.destroy', $type),
-                 'message' => 'Vuoi davvero procedere ad eliminare permanentemente questa tipologia?'])
+                    @csrf
+                    @method('PUT')
 
-              </td>
+                        <input type="text" class="hidden-form" value="{{$type->name}}" name="name" >
+
+                    </form>
+
+                </td>
+
+                <td>
+                    <button onclick="submitForm()" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></button>
+
+                    @include('admin.partials.form_delete', ['route' => route('admin.types.destroy', $type),
+                    'message' => 'Vuoi davvero procedere ad eliminare permanentemente questa tipologia?'])
+
+                </td>
             </tr>
             @endforeach
 
@@ -50,6 +76,14 @@
       </table>
 </div>
 
+<script>
 
+    function submitForm(){
+        const form = document.getElementById('form-edit');
+        form.submit();
+
+    }
+
+</script>
 
 @endsection

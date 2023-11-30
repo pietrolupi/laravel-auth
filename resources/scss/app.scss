@@ -46,10 +46,10 @@ aside{
 
 }
 
-.technologies.container{
+.technologies.container,
+.types.container{
     .table{
         max-width: 860px;
-        border: 1px solid grey;
         border-radius: 40;
 
         .hidden-form{

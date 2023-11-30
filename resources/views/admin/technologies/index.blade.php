@@ -60,13 +60,14 @@
                 </td>
 
                 <td>
-                    @include('admin.partials.form_delete', ['route' => route('admin.technologies.destroy', $technology),
-                 'message' => 'Vuoi davvero procedere ad eliminare permanentemente questa tecnologia?'])
-
 
                     {{-- bottone modifica per inviare le modifiche effettuate nel form nel <td> precedente --}}
 
                     <button onclick="submitForm()" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></button>
+
+                    @include('admin.partials.form_delete', ['route' => route('admin.technologies.destroy', $technology),
+                 'message' => 'Vuoi davvero procedere ad eliminare permanentemente questa tecnologia?'])
+
 
                 </td>
             </tr>
