@@ -5,6 +5,17 @@
 <div class="technologies container">
 
     <h1>Elenco Tencologie Utilizzate</h1>
+
+    @if($errors->any())
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{route('admin.technologies.store')}}" method="POST" >
         @csrf
 
@@ -19,18 +30,7 @@
 
     </form>
 
-    @if (session('error'))
-        <div class="alert alert-danger" role="alert">
-            {{session('error')}}
-        </div>
-    @endif
-
-    @if (session('success'))
-        <div class="alert alert-success" role="alert">
-            {{session('success')}}
-        </div>
-    @endif
-
+   @include('admin.partials.error_or_success')
 
 
 
@@ -45,23 +45,45 @@
             @foreach ($technologies as $technology)
 
             <tr>
-              <td>{{$technology->name}}</td>
+                <td>
+                    <form
+                    action="{{route('admin.technologies.update',$technology)}}"
+                    method="POST"
+                    id="form-edit">
 
-              <td>
-                <form
-                action="{{route('admin.technologies.destroy', $technology)}}"
-                method="POST"
-                onsubmit="return confirm('Vuoi davvero procedere ad eliminare permanentemente questa tecnologia?')">
                     @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
-                </form>
-              </td>
+                    @method('PUT')
+
+                        <input type="text" class="hidden-form" value="{{$technology->name}}" name="name" >
+
+                    </form>
+                </td>
+
+                <td>
+                    @include('admin.partials.form_delete', ['route' => route('admin.technologies.destroy', $technology),
+                 'message' => 'Vuoi davvero procedere ad eliminare permanentemente questa tecnologia?'])
+
+
+                    {{-- bottone modifica per inviare le modifiche effettuate nel form nel <td> precedente --}}
+
+                    <button onclick="submitForm()" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></button>
+
+                </td>
             </tr>
             @endforeach
 
         </tbody>
       </table>
 </div>
+
+<script>
+
+    function submitForm(){
+        const form = document.getElementById('form-edit');
+        form.submit();
+
+    }
+
+</script>
 
 @endsection

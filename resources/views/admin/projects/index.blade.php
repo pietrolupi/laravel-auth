@@ -4,7 +4,9 @@
 
 <div class="projects container">
     <h1 class="mb-3">I miei progetti</h1>
-    
+
+    @include('admin.partials.error_or_success')
+
     @if(session('deleted'))
         <div class="alert alert-success" role="alert">
             {{session('deleted')}}
@@ -34,15 +36,9 @@
 
                 <a href="{{route('admin.projects.edit', $project)}}" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></a>
 
-                <form
-                class="d-inline-block"
-                action="{{route('admin.projects.destroy', $project)}}"
-                method="POST"
-                onsubmit="return confirm('Vuoi davvero procedere ad eliminare permanentemente questo progetto?')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
-                </form>
+                @include('admin.partials.form_delete', ['route' => route('admin.projects.destroy', $project),
+                 'message' => 'Vuoi davvero procedere ad eliminare permanentemente questo progetto '])
+
               </td>
             </tr>
             @endforeach

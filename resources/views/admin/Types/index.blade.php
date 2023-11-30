@@ -19,17 +19,7 @@
 
     </form>
 
-    @if (session('error'))
-        <div class="alert alert-danger" role="alert">
-            {{session('error')}}
-        </div>
-    @endif
-
-    @if (session('success'))
-        <div class="alert alert-success" role="alert">
-            {{session('success')}}
-        </div>
-    @endif
+    @include('admin.partials.error_or_success')
 
 
 
@@ -48,14 +38,10 @@
               <td>{{$type->name}}</td>
 
               <td>
-                <form
-                action="{{route('admin.types.destroy', $type)}}"
-                method="POST"
-                onsubmit="return confirm('Vuoi davvero procedere ad eliminare permanentemente questa tecnologia?')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
-                </form>
+
+                @include('admin.partials.form_delete', ['route' => route('admin.types.destroy', $type),
+                 'message' => 'Vuoi davvero procedere ad eliminare permanentemente questa tipologia?'])
+
               </td>
             </tr>
             @endforeach
@@ -63,5 +49,7 @@
         </tbody>
       </table>
 </div>
+
+
 
 @endsection

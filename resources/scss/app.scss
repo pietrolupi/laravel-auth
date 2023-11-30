@@ -51,6 +51,15 @@ aside{
         max-width: 860px;
         border: 1px solid grey;
         border-radius: 40;
+
+        .hidden-form{
+            width: 100%;
+            border: none;
+            &:focus{
+                border: none;
+                outline: none;
+            }
+        }
     }
 }
 
