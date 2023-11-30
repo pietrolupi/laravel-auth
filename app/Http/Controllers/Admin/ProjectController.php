@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use Illuminate\Support\Str;
+use App\Functions\Helper;
+use App\Http\Requests\ProjectRequest;
+
+
 class ProjectController extends Controller
 {
     /**
@@ -38,15 +42,15 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProjectRequest $request)
     {
         $form_data = $request->all();
-        $new_project = new Project();
 
-        $form_data['slug'] = Project::generateSlug($form_data['title']);
-        $new_project->fill($form_data);
-        $new_project->save();
-        return redirect()->route('admin.projects.index', $new_project);
+        $form_data['slug'] = Helper::generateSlug($form_data['title'], Project::class);
+
+        $new_project = Project::create($form_data);
+
+        return redirect()->route('admin.projects.show', $new_project)->with('success', 'Il nuovo progetto è stato creato con successo');
     }
 
     /**
@@ -83,10 +87,10 @@ class ProjectController extends Controller
     {
         $form_data = $request->all();
 
-        if($project->title=== $form_data['title']){
+        if($project->title === $form_data['title']){
             $form_data['slug'] = $project->slug;
         }else{
-            $form_data['slug'] = Project::generateSlug($form_data['title']);
+           $form_data['slug'] = Helper::generateSlug($request->name, Project::class);
         }
 
         $project->update($form_data);

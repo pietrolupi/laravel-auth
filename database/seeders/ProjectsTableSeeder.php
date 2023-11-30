@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Project;
 use Illuminate\Support\Str;
+use App\Functions\Helper;
 
 class ProjectsTableSeeder extends Seeder
 {
