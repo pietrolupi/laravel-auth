@@ -8,6 +8,7 @@ use App\Models\Project;
 use Illuminate\Support\Str;
 use App\Functions\Helper;
 use App\Http\Requests\ProjectRequest;
+use Illuminate\Support\Facades\Storage;
 
 
 class ProjectController extends Controller
@@ -48,6 +49,15 @@ class ProjectController extends Controller
 
         $form_data['slug'] = Helper::generateSlug($form_data['title'], Project::class);
 
+
+        //se esiste image la salvo nel file systame e nel database
+        if(array_key_exists('image', $form_data)){
+            //prima di salvare l'image prendo il nome del file per salvarlo nel database
+            $form_data['image_original_name'] = $request->file('image')->getClientOriginalName();
+            //salvo il file nello storage, rinominandolo
+            $form_data['image'] = Storage::put('uploads', $form_data['image']);
+        }
+
         $new_project = Project::create($form_data);
 
         return redirect()->route('admin.projects.show', $new_project)->with('success', 'Il nuovo progetto è stato creato con successo');
@@ -83,20 +93,32 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
+    public function update(ProjectRequest $request, Project $project)
     {
-        $form_data = $request->all();
 
-        if($project->title === $form_data['title']){
-            $form_data['slug'] = $project->slug;
-        }else{
-           $form_data['slug'] = Helper::generateSlug($request->name, Project::class);
-        }
+    $form_data = $request->all();
 
-        $project->update($form_data);
-
-        return redirect()->route('admin.projects.show', $project);
+    if ($project->title === $form_data['title']) {
+        $form_data['slug'] = $project->slug;
+    } else {
+        $form_data['slug'] = Helper::generateSlug($form_data['title'], Project::class);
     }
+
+    //verifico se esiste l'immagine che vado a mettere esiste già, in quel caso ELIMINO la vecchia
+    if(array_key_exists('image', $form_data)){
+        if ($project->image) {
+            Storage::disk('public')->delete( $project->image);
+        }
+        //prima di salvare l'image prendo il nome del file per salvarlo nel database
+        $form_data['image_original_name'] = $request->file('image')->getClientOriginalName();
+        //salvo il file nello storage, rinominandolo
+        $form_data['image'] = Storage::put('uploads/', $form_data['image']);
+    }
+
+    $project->update($form_data);
+
+    return redirect()->route('admin.projects.show', $project)->with('success', 'Progetto aggiornato con successo');
+}
 
     /**
      * Remove the specified resource from storage.
@@ -106,8 +128,14 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        //se il progetto ha una immagine la cancello dalla cartella
+        if ($project->image) {
+            Storage::disk('public')->delete($project->image);
+        }
 
+        //passaggi standard
         $project->delete();
-        return redirect()->route('admin.projects.index')->with('success', 'Progetto eliminato correttamente');
+        return redirect()->route('admin.projects.index')->with('success', 'Progetto eliminato con successo');
+
     }
 }

@@ -17,7 +17,8 @@
         <form
         class="form-group"
         action="{{route('admin.projects.store')}}"
-        method="POST">
+        method="POST"
+        enctype="multipart/form-data">
 
         @csrf
 
@@ -25,7 +26,6 @@
             <label for="title" class="form-label">Titolo</label>
             <input
             type="text"
-            class="form-control"
             id="title"
             name="title"
             class="form-control
@@ -34,6 +34,7 @@
             @enderror"
             value="{{old('title')}}">
         </div>
+
         <div class="mb-3">
             <label for="description" class="form-label">Descrizione</label>
             <textarea
@@ -47,18 +48,23 @@
             value="{{old('description')}}"
             ></textarea>
         </div>
+
         <div class="mb-3">
             <label for="image" class="form-label">Immagine</label>
             <input
-            type="text"
+            type="file"
             id="image"
             name="image"
             class="form-control
             @error('image')
             is-invalid
             @enderror"
+            onchange="showImage(event)"
             value="{{old('image')}}"
             >
+
+            <img id="thumb" src="/img/placeholder.jpg" alt="">
+
         </div>
         <div class="mb-3">
             <label for="github_link" class="form-label">Link Github</label>
@@ -94,4 +100,14 @@
         </form>
 
     </div>
+
+    <script>
+        function showImage(event) {
+
+            const thumb = document.getElementById('thumb');
+
+            thumb.src = URL.createObjectURL(event.target.files[0]);
+        }
+    </script>
+    
 @endsection

@@ -4,32 +4,91 @@
     <div class="edit container">
         <h1>Modifica il progetto: "{{$project->title}}"</h1>
 
+        @if($errors->any())
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
         <form
         class="d-inline-block"
         action="{{route('admin.projects.update', $project)}}"
-        method="POST">
+        method="POST"
+        enctype="multipart/form-data">>
             @csrf
             @method('PUT')
 
             <div class="mb-3">
                 <label for="title" class="form-label">Titolo</label>
-                <input type="text" class="form-control" id="title" name="title" value="{{$project->title}}">
+                <input
+                type="text"
+                class="form-control
+                @error('title')
+                is-invalid
+                @enderror"
+                id="title"
+                name="title"
+                value="{{$project->title}}"
+                >
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Descrizione</label>
-                <textarea class="form-control" id="description" name="description" rows="3">{{$project->description}}</textarea>
+                <textarea
+                class="form-control
+                @error('description')
+                is-invalid
+                @enderror"
+                id="description"
+                name="description"
+                rows="3"
+                >{{$project->description}}</textarea>
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">Immagine</label>
-                <input type="text" class="form-control" id="image" name="image" value="{{$project->image}}">
+
+                <input
+                type="file"
+                class="form-control
+                @error('image') is-invalid
+                @enderror"
+                id="image"
+                name="image"
+                onchange="showImage(event)">
+
+                @if ($project->image)
+                    <img id="thumb" width="200" src="{{asset('storage/' . $project->image)}}" alt="">
+                @else
+                    <img id="thumb" width="200" src="{{asset('img/placeholder.jpg')}}" alt="">
+                @endif
+
             </div>
+
             <div class="mb-3">
                 <label for="github_link" class="form-label">Link Github</label>
-                <input type="text" class="form-control" id="github_link" name="github_link" value="{{$project->github_link}}">
+                <input type="text"
+                class="form-control
+                @error('github_link')
+                is-invalid
+                @enderror"
+                id="github_link"
+                name="github_link"
+                value="{{$project->github_link}}">
             </div>
             <div class="mb-3">
                 <label for="other_developers" class="form-label">Altri Developer</label>
-                <input type="text" class="form-control" id="other_developers" name="other_developers" value="{{$project->other_developers}}">
+                <input
+                type="text"
+                class="form-control
+                @error('other_developers')
+                is-invalid
+                @enderror"
+                id="other_developers"
+                name="other_developers"
+                value="{{$project->other_developers}}">
             </div>
 
             <button type="submit" class="btn btn-success">Invia</button>
@@ -38,4 +97,14 @@
         </form>
 
     </div>
+
+    <script>
+        function showImage(event) {
+
+            const thumb = document.getElementById('thumb');
+
+            thumb.src = URL.createObjectURL(event.target.files[0]);
+        }
+    </script>
+
 @endsection

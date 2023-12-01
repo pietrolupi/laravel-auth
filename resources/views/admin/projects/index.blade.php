@@ -31,7 +31,7 @@
               <td>{{$project->description}}</td>
               <td>{{$project->github_link}}</td>
               <td>{{$project->other_developers}}</td>
-              <td>
+              <td class="d-flex justify-content-between">
                 <a class="btn btn-primary" href="{{route('admin.projects.show', $project)}}"><i class="fa-solid fa-eye"></i></a>
 
                 <a href="{{route('admin.projects.edit', $project)}}" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></a>

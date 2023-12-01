@@ -15,6 +15,7 @@ class Project extends Model
         'slug',
         'description',
         'image',
+        'image_original_name',
         'github_link',
         'other_developers',
     ];
