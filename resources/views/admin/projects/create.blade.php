@@ -94,6 +94,8 @@
 
         </div>
 
+
+
         <button type="submit" class="btn btn-success">Invia</button>
         <button type="reset" class="btn btn-danger">Annulla</button>
 
@@ -101,7 +103,19 @@
 
     </div>
 
+
+
     <script>
+
+        /* CKeditor */
+
+        ClassicEditor
+        .create( document.querySelector( '#description' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+
+        /////////////////////////////////
         function showImage(event) {
 
             const thumb = document.getElementById('thumb');
@@ -109,5 +123,5 @@
             thumb.src = URL.createObjectURL(event.target.files[0]);
         }
     </script>
-    
+
 @endsection

@@ -11,6 +11,6 @@
 
         <p>{{$project->image_original_name}}</p>
     </div>
-    <p>{{$project->description}}</p>
+    <p>{!! $project->description !!}</p>
 </div>
 @endsection

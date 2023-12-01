@@ -66,3 +66,11 @@ aside{
 #thumb{
     width: 50px;
 }
+
+
+/* EDITOR */
+
+.ck-editor__editable[role="textbox"] {
+    /* editing area */
+    min-height: 300px;
+}
